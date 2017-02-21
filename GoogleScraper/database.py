@@ -90,8 +90,7 @@ class SearchEngineResultsPage(Base):
     no_results = Column(Boolean, default=False)
 
     def __str__(self):
-        return '<SERP[{search_engine_name}] has [{num_results}] link results for query "{query}">'.format(
-            **self.__dict__)
+        return '<SERP[{search_engine_name}] has [{num_results}] link results for query "{query}">'.format(**self.__dict__)
 
     def __repr__(self):
         return self.__str__()
