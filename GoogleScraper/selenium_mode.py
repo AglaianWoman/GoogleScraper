@@ -155,7 +155,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         assert self.proxy and self.webdriver, 'Scraper instance needs valid webdriver and proxy instance to make the proxy check'
 
         online = False
-        status = 'Proxy check failed: {host}:{port} is not used while requesting'.format(**self.proxy.__dict__)
+        status = 'Proxy check failed: {host}:{port} is not used while requesting'.format(host=self.proxy.host, port=self.proxy.port)
         ipinfo = {}
 
         try:
