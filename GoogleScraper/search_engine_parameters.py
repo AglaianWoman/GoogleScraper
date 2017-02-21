@@ -73,7 +73,7 @@ google_search_params = {
     # current geographic location.
     'safe': 'off',  # Turns the adult content filter on or off
     'rls': None,
-    #Source of query with version of the client and language set. With firefox set to 'org.mozilla:en-US:official'
+    # Source of query with version of the client and language set. With firefox set to 'org.mozilla:en-US:official'
     'sa': None,
     # User search behavior parameter sa=N: User searched, sa=X: User clicked on related searches in the SERP
     'source': None,  # Google navigational parameter specifying where you came from, univ: universal search
@@ -117,8 +117,8 @@ google_search_params = {
     'oe': 'UTF-8',  # Sets the character encoding that is used to encode the results.
     'ip': None,
     # When queries are made using the HTTP protocol, the ip parameter contains the IP address of the user
-    #who submitted the search query. You do not supply this parameter with the search request. The ip
-    #parameter is returned in the XML search results. For example:
+    # who submitted the search query. You do not supply this parameter with the search request. The ip
+    # parameter is returned in the XML search results. For example:
     'sitesearch': None,
     # Limits search results to documents in the specified domain, host, or web directory. Has no effect if the q
     # parameter is empty. This parameter has the same effect as the site special query term.
@@ -147,19 +147,19 @@ google_search_params = {
     # ft are: 'i': filetype and 'e': -filetype
     'as_lq': None,
     # Specifies a URL, and causes search results to show pages that link to the that URL. This parameter has
-    #the same effect as the link special query term (see “Back Links” on page 20). No other query terms can
-    #be used when using this parameter.
+    # the same effect as the link special query term (see “Back Links” on page 20). No other query terms can
+    # be used when using this parameter.
     'as_occt': None,
     # Specifies where the search engine is to look for the query terms on the page: anywhere on the page, in
-    #the title, or in the URL.
+    # the title, or in the URL.
     'as_oq': None,
     # Combines the specified terms to the search query in parameter q, with an OR operation. This parameter
     # has the same effect as the OR special query term (see “Boolean OR Search” on page 20).
     'as_q': None,  # Adds the specified query terms to the query terms in parameter q.
     'as_sitesearch': None,
     # Limits search results to documents in the specified domain, host or web directory, or excludes results
-    #from the specified location, depending on the value of as_dt. This parameter has the same effect as the
-    #site or -site special query terms. It has no effect if the q parameter is empty.
+    # from the specified location, depending on the value of as_dt. This parameter has the same effect as the
+    # site or -site special query terms. It has no effect if the q parameter is empty.
     'entqr': None,  # This parameter sets the query expansion policy according to the following valid values:
     # 0: None
     # 1: Standard Uses only the search appliance’s synonym file.
@@ -182,7 +182,7 @@ Bing search params.
 
 """
 bing_search_params = {
-
+    'adlt': 'off'
 }
 
 """

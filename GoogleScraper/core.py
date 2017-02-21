@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 class WrongConfigurationError(Exception):
     pass
 
+
 def id_for_keywords(keywords):
     """Determine a unique id for the keywords.
 
@@ -97,7 +98,8 @@ def start_python_console(namespace=None, noipython=False, banner=''):
             except ImportError:
                 pass
             else:
-                import rlcompleter
+                pass
+                # import rlcompleter
 
                 readline.parse_and_bind("tab:complete")
             code.interact(banner=banner, local=namespace)
@@ -202,7 +204,7 @@ def main(return_results=False, parse_cmd_line=True, config_from_dict=None):
     proxy_db = config.get('mysql_proxy_db', '')
 
     # when no search engine is specified, use google
-    search_engines = config.get('search_engines', ['google',])
+    search_engines = config.get('search_engines', ['google'])
     if not isinstance(search_engines, list):
         if search_engines == '*':
             search_engines = config.get('supported_search_engines')
@@ -238,8 +240,7 @@ def main(return_results=False, parse_cmd_line=True, config_from_dict=None):
     if not (keyword or keywords) and not kwfile:
         # Just print the help.
         get_command_line(True)
-        print('No keywords to scrape for. Please provide either an keyword file (Option: --keyword-file) or specify and '
-            'keyword with --keyword.')
+        print('No keywords to scrape for. Please provide either an keyword file (Option: --keyword-file) or specify and keyword with --keyword.')
         return
 
     cache_manager = CacheManager(config)
@@ -456,4 +457,4 @@ def main(return_results=False, parse_cmd_line=True, config_from_dict=None):
     session.commit()
 
     if return_results:
-        return scraper_search
+        return session

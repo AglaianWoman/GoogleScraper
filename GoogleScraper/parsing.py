@@ -30,12 +30,12 @@ class Parser():
     """Parses SERP pages.
 
     Each search engine results page (SERP) has a similar layout:
-    
+
     The main search results are usually in a html container element (#main, .results, #leftSide).
-    There might be separate columns for other search results (like ads for example). Then each 
+    There might be separate columns for other search results (like ads for example). Then each
     result contains basically a link, a snippet and a description (usually some text on the
     target site). It's really astonishing how similar other search engines are to Google.
-    
+
     Each child class (that can actual parse a concrete search engine results page) needs
     to specify css selectors for the different search types (Like normal search, news search, video search, ...).
 
@@ -73,10 +73,10 @@ class Parser():
         """Create new Parser instance and parse all information.
 
         Args:
-            html: The raw html from the search engine search. If not provided, you can parse 
+            html: The raw html from the search engine search. If not provided, you can parse
                     the data later by calling parse(html) directly.
             searchtype: The search type. By default "normal"
-            
+
         Raises:
             Assertion error if the subclassed
             specific parser cannot handle the the settings.
@@ -109,8 +109,8 @@ class Parser():
 
     def parse(self, html=None):
         """Public function to start parsing the search engine results.
-        
-        Args: 
+
+        Args:
             html: The raw html data to extract the SERP entries from.
         """
         if html:
@@ -137,7 +137,7 @@ class Parser():
 
     def _parse(self, cleaner=None):
         """Internal parse the dom according to the provided css selectors.
-        
+
         Raises: InvalidSearchTypeException if no css selectors for the searchtype could be found.
         """
         self.num_results = 0
@@ -152,8 +152,7 @@ class Parser():
 
         self.num_results_for_query = self.first_match(num_results_selector, self.dom)
         if not self.num_results_for_query:
-            logger.debug('{}: Cannot parse num_results from serp page with selectors {}'.format(self.__class__.__name__,
-                                                                                       num_results_selector))
+            logger.debug('{}: Cannot parse num_results from serp page with selectors {}'.format(self.__class__.__name__, num_results_selector))
 
         # get the current page we are at. Sometimes we search engines don't show this.
         try:
@@ -180,7 +179,7 @@ class Parser():
 
             self.search_results[result_type] = []
 
-            for selector_specific, selectors in selector_class.items():
+            for _, selectors in selector_class.items():
 
                 if 'result_container' in selectors and selectors['result_container']:
                     css = '{container} {result_container}'.format(**selectors)
@@ -272,14 +271,14 @@ class Parser():
                     match = self.advanced_css(selector, element=element)
                     if match:
                         return match
-                except IndexError as e:
+                except IndexError:
                     pass
 
         return False
 
     def after_parsing(self):
         """Subclass specific behaviour after parsing happened.
-        
+
         Override in subclass to add search engine specific behaviour.
         Commonly used to clean the results.
         """
@@ -312,7 +311,7 @@ class Parser():
 
 
 """
-Here follow the different classes that provide CSS selectors 
+Here follow the different classes that provide CSS selectors
 for different types of SERP pages of several common search engines.
 
 Just look at them and add your own selectors in a new class if you
@@ -404,7 +403,7 @@ class GoogleParser(Parser):
     image_search_selectors = {
         'results': {
             'de_ip': {
-                'container': 'li#isr_mc',
+                'container': '#isr_mc',
                 'result_container': 'div.rg_di',
                 'link': 'a.rg_l::attr(href)'
             },
@@ -422,12 +421,12 @@ class GoogleParser(Parser):
 
     def after_parsing(self):
         """Clean the urls.
-        
+
         A typical scraped results looks like the following:
-        
+
         '/url?q=http://www.youtube.com/user/Apple&sa=U&ei=\
         lntiVN7JDsTfPZCMgKAO&ved=0CFQQFjAO&usg=AFQjCNGkX65O-hKLmyq1FX9HQqbb9iYn9A'
-        
+
         Clean with a short regex.
         """
         super().after_parsing()
@@ -543,10 +542,9 @@ class YandexParser(Parser):
                 try:
                     i = self.html.index(substr)
                     if i:
-                        self.num_results_for_query = re.search(r'— (.)*?"', self.html[i:i+len(self.query) + 150]).group()
+                        self.num_results_for_query = re.search(r'— (.)*?"', self.html[i:i + len(self.query) + 150]).group()
                 except Exception as e:
                     logger.debug(str(e))
-
 
         if self.searchtype == 'image':
             for key, i in self.iter_serp_items():
@@ -626,7 +624,7 @@ class BingParser(Parser):
             'ch_ip': {
                 'container': '#dg_c .imgres',
                 'result_container': '.dg_u',
-                'link': 'a.dv_i::attr(m)'
+                'link': 'a::attr(m)'
             },
         }
     }
@@ -1049,12 +1047,12 @@ def parse_serp(config, html=None, parser=None, scraper=None, search_engine=None,
 
 if __name__ == '__main__':
     """Originally part of https://github.com/NikolaiT/GoogleScraper.
-    
-    Only for testing purposes: May be called directly with an search engine 
+
+    Only for testing purposes: May be called directly with an search engine
     search url. For example:
-    
+
     python3 parsing.py 'http://yandex.ru/yandsearch?text=GoogleScraper&lr=178&csg=82%2C4317%2C20%2C20%2C0%2C0%2C0'
-    
+
     Please note: Using this module directly makes little sense, because requesting such urls
     directly without imitating a real browser (which is done in my GoogleScraper module) makes
     the search engines return crippled html, which makes it impossible to parse.
