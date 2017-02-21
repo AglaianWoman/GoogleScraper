@@ -115,7 +115,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
         'duckduckgo': None,  # duckduckgo doesnt't support direct image search
         'ask': 'http://www.ask.com/pictures/',
         'blekko': None,
-        'googleimg':'https://www.google.com/advanced_image_search',
+        'googleimg': 'https://www.google.com/advanced_image_search',
         'baiduimg': 'http://image.baidu.com/',
     }
 
@@ -179,7 +179,6 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         return online
 
-
     def _save_debug_screenshot(self):
         """
         Saves a debug screenshot of the browser window to figure
@@ -220,9 +219,9 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                     '--proxy-server={}://{}:{}'.format(self.proxy.proto, self.proxy.host, self.proxy.port))
                 self.webdriver = webdriver.Chrome(chrome_options=chrome_ops)
             else:
-                self.webdriver = webdriver.Chrome()#service_log_path='/tmp/chromedriver_log.log')
+                self.webdriver = webdriver.Chrome()  # service_log_path='/tmp/chromedriver_log.log')
             return True
-        except WebDriverException as e:
+        except WebDriverException:
             # we don't have a chrome executable or a chrome webdriver installed
             raise
         return False
@@ -386,7 +385,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
             max_wait: How long to wait maximally before returning False.
         """
         def find_visible_search_param(driver):
-            for param, field in self._get_search_param_fields().items():
+            for _, field in self._get_search_param_fields().items():
                 input_field = driver.find_element(*field)
                 if not input_field:
                     return False
@@ -434,12 +433,10 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
         # wait until the next page was loaded
 
-
         if not next_url:
             return False
         else:
             return next_url
-
 
     def _find_next_page_element(self):
         """Finds the element that locates the next page for any search engine.
@@ -495,12 +492,11 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
                 try:
                     WebDriverWait(self.webdriver, 5).\
-            until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, selector), str(self.page_number)))
-                except TimeoutException as e:
+                        until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, selector), str(self.page_number)))
+                except TimeoutException:
                     self._save_debug_screenshot()
                     content = self.webdriver.find_element_by_css_selector(selector).text
-                    raise Exception('Pagenumber={} did not appear in navigation. Got "{}" instead'\
-                                    .format(self.page_number), content)
+                    raise Exception('Pagenumber={} did not appear in navigation. Got "{}" instead'.format(self.page_number), content)
 
         elif self.search_type == 'image':
             self.wait_until_title_contains_keyword()
@@ -579,7 +575,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
                 try:
                     self.html = self.webdriver.execute_script('return document.body.innerHTML;')
-                except WebDriverException as e:
+                except WebDriverException:
                     self.html = self.webdriver.page_source
 
                 super().after_search()
