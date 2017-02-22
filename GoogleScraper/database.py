@@ -120,7 +120,7 @@ class SearchEngineResultsPage(Base):
                     parsed = urlparse(link['link'])
 
                     # fill with nones to prevent key errors
-                    [link.update({key: None}) for key in ('snippet', 'title', 'visible_link') if key not in link]
+                    [link.update({key: None}) for key in ('snippet', 'title', 'visible_link', 'rating') if key not in link]
 
                     Link(
                         link=link['link'],
@@ -130,7 +130,8 @@ class SearchEngineResultsPage(Base):
                         domain=parsed.netloc,
                         rank=link['rank'],
                         serp=self,
-                        link_type=key
+                        link_type=key,
+                        rating=link['rating']
                     )
 
     def set_values_from_scraper(self, scraper):
@@ -173,6 +174,7 @@ class Link(Base):
     visible_link = Column(String)
     rank = Column(Integer)
     link_type = Column(String)
+    rating = Column(String)
 
     serp_id = Column(Integer, ForeignKey('serp.id'))
     serp = relationship(SearchEngineResultsPage, backref=backref('links', uselist=True))
@@ -231,7 +233,6 @@ class SearchEngine(Base):
 
 class SearchEngineProxyStatus(Base):
     """Stores last proxy status for the given search engine.
-    
     A proxy can either work on a search engine or not.
     """
 
