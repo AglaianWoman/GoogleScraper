@@ -11,9 +11,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class AsyncHttpScrape(object):
     """Scrape asynchronously using asyncio.
-    
+
     Some search engines don't block after a certain amount of requests.
     Google surely does (after very few parallel requests).
     But with bing or example, it's now (18.01.2015) no problem to
@@ -123,8 +124,7 @@ class AsyncScrapeScheduler(object):
                 if scrape:
 
                     if self.cache_manager:
-                        self.cache_manager.cache_results(scrape.parser, scrape.query, scrape.search_engine_name, scrape.scrape_method,
-                                      scrape.page_number)
+                        self.cache_manager.cache_results(scrape.parser, scrape.query, scrape.search_engine_name, scrape.scrape_method, scrape.page_number)
 
                     if scrape.parser:
                         serp = parse_serp(self.config, parser=scrape.parser, scraper=scrape, query=scrape.query)
@@ -150,4 +150,3 @@ if __name__ == '__main__':
 
     manager = AsyncScrapeScheduler(cfg, scrape_jobs)
     manager.run()
-
