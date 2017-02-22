@@ -12,12 +12,15 @@ class ScrapSerps():
     def scrap_serps(self, serp_query):
         search = self.scrap(serp_query)
         result = []
-        pprint.pprint(search.__dict__)
         for serp in search.serps:
             for link in serp.links:
                     # link, snippet, title, visible_link, domain, rank, serp, link_type, rating
                 # if 'results' in link.link_type:
                 result.append({
+                    'query_num_results total': serp.num_results_for_query,
+                    'query_num_results_page': serp.num_results,
+                    'query_page_number': serp.page_number,
+                    'query': serp.query,
                     'serp_rank': link.rank,
                     'serp_type': link.link_type,
                     'serp_url': link.link,
@@ -25,7 +28,8 @@ class ScrapSerps():
                     'serp_title': self.adjust_encoding(link.title)['data'],
                     'serp_domain': self.adjust_encoding(link.domain)['data'],
                     'serp_visible_link': self.adjust_encoding(link.visible_link)['data'],
-                    'serp_snippet': self.adjust_encoding(link.snippet)['data']
+                    'serp_snippet': self.adjust_encoding(link.snippet)['data'],
+                    'serp_sitelinks': self.adjust_encoding(link.sitelinks)['data']
                 })
         return result
 
@@ -39,7 +43,7 @@ class ScrapSerps():
             'num_pages_for_keyword': 2,
             'scrape_method': 'http',
             'do_caching': 'True',
-            'output_filename': 'out.json',
+            'output_filename': None,
             'output_format': 'json',
             'print_results': 'all'
         }
