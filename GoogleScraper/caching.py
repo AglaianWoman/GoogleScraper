@@ -41,6 +41,7 @@ logger = logging.getLogger(__name__)
 
 ALLOWED_COMPRESSION_ALGORITHMS = ('gz', 'bz2')
 
+
 class InvalidConfigurationFileException(Exception):
     """
     Used when the cache module cannot
@@ -104,11 +105,11 @@ class CompressedFile(object):
             return f.read().decode()
 
     def write_gz(self, data):
-        with gzip.open(self.path, mode='wb', encoding='utf-8') as f:
+        with gzip.open(self.path, mode='wb') as f:
             f.write(data)
 
     def write_bz2(self, data):
-        with bz2.open(self.path, mode='wb', encoding='utf-8') as f:
+        with bz2.open(self.path, mode='wb') as f:
             f.write(data)
 
     def read(self):
@@ -121,7 +122,6 @@ class CompressedFile(object):
         return self.writers[self.algorithm](data)
 
 
-
 class CacheManager():
     """
     Manages caching for GoogleScraper.
@@ -131,13 +131,11 @@ class CacheManager():
         self.config = config
         self.maybe_create_cache_dir()
 
-
     def maybe_create_cache_dir(self):
         if self.config.get('do_caching', True):
             cd = self.config.get('cachedir', '.scrapecache')
             if not os.path.exists(cd):
                 os.mkdir(cd)
-
 
     def maybe_clean_cache(self):
         """
@@ -158,7 +156,6 @@ class CacheManager():
                         shutil.rmtree(path)
                     else:
                         os.remove(os.path.join(cachedir, fname))
-
 
     def cached_file_name(self, keyword, search_engine, scrape_mode, page_number):
         """Make a unique file name from the search engine search request.
@@ -186,7 +183,6 @@ class CacheManager():
         sha = hashlib.sha256()
         sha.update(b''.join(str(s).encode() for s in unique))
         return '{file_name}.{extension}'.format(file_name=sha.hexdigest(), extension='cache')
-
 
     def get_cached(self, keyword, search_engine, scrapemode, page_number):
         """Loads a cached SERP result.
@@ -269,7 +265,6 @@ class CacheManager():
             else:
                 raise InvalidConfigurationFileException('"{}" is a invalid configuration file.'.format(path))
 
-
     def cache_results(self, parser, query, search_engine, scrape_mode, page_number, db_lock=None):
         """Stores the html of an parser in a file.
 
@@ -315,7 +310,6 @@ class CacheManager():
             if db_lock:
                 db_lock.release()
 
-
     def _get_all_cache_files(self):
         """Return all files found in the cachedir.
 
@@ -325,12 +319,11 @@ class CacheManager():
             compression algorithm: "filename.cache.zip"
         """
         files = set()
-        for dirpath, dirname, filenames in os.walk(self.config.get('cachedir', '.scrapecache')):
+        for dirpath, _, filenames in os.walk(self.config.get('cachedir', '.scrapecache')):
             for name in filenames:
                 if 'cache' in name:
                     files.add(os.path.join(dirpath, name))
         return files
-
 
     def _caching_is_one_to_one(self, keywords, search_engine, scrapemode, page_number):
         """Check whether all keywords map to a unique file name.
@@ -352,14 +345,13 @@ class CacheManager():
             else:
                 mappings[file_hash].append(kw)
 
-        duplicates = [v for k, v in mappings.items() if len(v) > 1]
+        duplicates = [v for _, v in mappings.items() if len(v) > 1]
         if duplicates:
             logger.info('Not one-to-one. {}'.format(duplicates))
             return False
         else:
             logger.info('one-to-one')
             return True
-
 
     def parse_all_cached_files(self, scrape_jobs, session, scraper_search):
         """Walk recursively through the cachedir (as given by the Config) and parse all cached files.
@@ -398,8 +390,7 @@ class CacheManager():
                 # We found a file that contains the keyword, search engine name and
                 # search mode that fits our description. Let's see if there is already
                 # an record in the database and link it to our new ScraperSearch object.
-                serp = self.get_serp_from_database(session, job['query'], job['search_engine'], job['scrape_method'],
-                                              job['page_number'])
+                serp = self.get_serp_from_database(session, job['query'], job['search_engine'], job['scrape_method'], job['page_number'])
 
                 if not serp:
                     serp = self.parse_again(fname, job['search_engine'], job['scrape_method'], job['query'])
@@ -423,7 +414,6 @@ class CacheManager():
 
         return scrape_jobs
 
-
     def parse_again(self, fname, search_engine, scrape_method, query):
         """
         @todo: `scrape_method` is not used here -> check if scrape_method is passed to this function and remove it
@@ -436,7 +426,6 @@ class CacheManager():
             search_engine=search_engine,
             query=query
         )
-
 
     def get_serp_from_database(self, session, query, search_engine, scrape_method, page_number):
         try:
@@ -451,7 +440,6 @@ class CacheManager():
             # we have a cache file that matches the above identifying information
             # but it was never stored to the database.
             return False
-
 
     def clean_cachefiles(self):
         """Clean silly html from all cachefiles in the cachdir"""
@@ -471,7 +459,6 @@ class CacheManager():
                 cleaned = lxml.html.tostring(cleaner.clean_html(lxml.html.fromstring(data)))
                 cfile.write(cleaned)
                 logger.info('Cleaned {}. Size before: {}, after {}'.format(file, len(data), len(cleaned)))
-
 
     def fix_broken_cache_names(self, url, search_engine, scrapemode, page_number):
         """Fix broken cache names.
@@ -500,7 +487,6 @@ class CacheManager():
             i += 1
 
         logger.debug('Renamed {} files.'.format(i))
-
 
     def cached(self, f, attr_to_cache=None):
         """Decorator that makes return value of functions cachable.
