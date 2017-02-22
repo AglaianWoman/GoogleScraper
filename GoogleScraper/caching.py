@@ -97,11 +97,11 @@ class CompressedFile(object):
         }
 
     def read_gz(self):
-        with gzip.open(self.path, mode='rb', encoding='utf-8') as f:
+        with gzip.open(self.path, mode='rb') as f:
             return f.read().decode()
 
     def read_bz2(self):
-        with bz2.open(self.path, mode='rb', encoding='utf-8') as f:
+        with bz2.open(self.path, mode='rb') as f:
             return f.read().decode()
 
     def write_gz(self, data):
