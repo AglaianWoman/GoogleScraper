@@ -71,7 +71,9 @@ def init_outfile(config, force_reload=False):
 
         output_file = config.get('output_filename', '')
 
-        if output_file.endswith('.json'):
+        if output_file is None:
+            output_format = 'stdout'
+        elif output_file.endswith('.json'):
             output_format = 'json'
         elif output_file.endswith('.csv'):
             output_format = 'csv'
