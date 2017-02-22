@@ -457,4 +457,4 @@ def main(return_results=False, parse_cmd_line=True, config_from_dict=None):
     session.commit()
 
     if return_results:
-        return session
+        return scraper_search
