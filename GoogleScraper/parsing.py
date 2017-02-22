@@ -361,7 +361,7 @@ class GoogleParser(Parser):
                 'title': 'h3.r > a:first-child::text',
                 'visible_link': 'cite::text',
                 'rating': 'div.f.slp::text',
-                'sitelinks': 'div.osl a::text'
+                'sitelinks': 'div.osl::text'
             },
             'de_ip': {
                 'container': '#center_col',
@@ -371,7 +371,7 @@ class GoogleParser(Parser):
                 'title': 'h3.r > a:first-child::text',
                 'visible_link': 'cite::text',
                 'rating': 'div.f.slp::text',
-                'sitelinks': 'div.osl a::text'
+                'sitelinks': 'div.osl::text'
             },
             'de_ip_news_items': {
                 'container': 'li.card-section',
@@ -379,8 +379,8 @@ class GoogleParser(Parser):
                 'snippet': 'span._dwd::text',
                 'title': 'a._Dk::text',
                 'visible_link': 'cite::text',
-                'rating': '',
-                'sitelinks': ''
+                'rating': 'div.osl a:first-child::text',
+                'sitelinks': 'div.osl::text'
             },
         },
         'ads_main': {
@@ -392,7 +392,7 @@ class GoogleParser(Parser):
                 'title': 'h3.r > a:first-child::text',
                 'visible_link': '.ads-visurl cite::text',
                 'rating': 'div._Ond _Bu span::text',
-                'sitelinks': ''
+                'sitelinks': 'div.osl::text'
             },
             'de_ip': {
                 'container': '#center_col',
@@ -402,7 +402,7 @@ class GoogleParser(Parser):
                 'title': 'h3 > a:first-child::text',
                 'visible_link': '.ads-visurl cite::text',
                 'rating': 'div._Ond _Bu span::text',
-                'sitelinks': ''
+                'sitelinks': 'div.osl::text'
             }
         },
         'ads_aside': {

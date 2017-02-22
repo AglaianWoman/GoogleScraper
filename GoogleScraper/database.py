@@ -120,7 +120,7 @@ class SearchEngineResultsPage(Base):
                     parsed = urlparse(link['link'])
 
                     # fill with nones to prevent key errors
-                    [link.update({key: None}) for key in ('snippet', 'title', 'visible_link', 'rating') if key not in link]
+                    [link.update({key: None}) for key in ('snippet', 'title', 'visible_link', 'rating', 'sitelinks') if key not in link]
 
                     Link(
                         link=link['link'],
@@ -131,7 +131,8 @@ class SearchEngineResultsPage(Base):
                         rank=link['rank'],
                         serp=self,
                         link_type=key,
-                        rating=link['rating']
+                        rating=link['rating'],
+                        sitelinks=link['sitelinks']
                     )
 
     def set_values_from_scraper(self, scraper):
@@ -175,6 +176,7 @@ class Link(Base):
     rank = Column(Integer)
     link_type = Column(String)
     rating = Column(String)
+    sitelinks = Column(String)
 
     serp_id = Column(Integer, ForeignKey('serp.id'))
     serp = relationship(SearchEngineResultsPage, backref=backref('links', uselist=True))
