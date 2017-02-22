@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 headers = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Language': 'en-US,en;q=0.5',
+    'Accept-Language': 'de-DE,de;q=0.8,en-US;q=0.6,en;q=0.4',
     'Accept-Encoding': 'gzip, deflate, sdch',
     'Connection': 'keep-alive',
 }
