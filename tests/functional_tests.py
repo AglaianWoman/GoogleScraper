@@ -39,6 +39,7 @@ def predicate_true_at_least_n_times(pred, collection, n, key):
     elif key in collection[0]:
         assert len([v[key] for v in collection if pred(v[key])]) > n
 
+
 class GoogleScraperFunctionalTestCase(unittest.TestCase):
 
     def test_all_search_engines_in_http_mode(self):
@@ -74,7 +75,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
             self.assertEqual(serp.no_results, False)
             self.assertEqual(serp.num_results, len(serp.links))
 
-            for j, link in enumerate(serp.links):
+            for _, link in enumerate(serp.links):
                 if link.link_type == 'results':
                     self.assertTrue(is_string_and_longer_than(link.title, 3))
                     self.assertTrue(is_string_and_longer_than(link.snippet, 3))
@@ -82,7 +83,6 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
                 self.assertTrue(is_string_and_longer_than(link.link, 10))
                 self.assertTrue(link.domain in link.link)
                 self.assertTrue(isinstance(link.rank, int))
-
 
     def test_all_search_engines_in_selenium_mode(self):
         """
@@ -120,7 +120,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
             self.assertEqual(serp.no_results, False)
             self.assertEqual(serp.num_results, len(serp.links))
 
-            for j, link in enumerate(serp.links):
+            for _, link in enumerate(serp.links):
                 if link.link_type == 'results':
                     self.assertTrue(is_string_and_longer_than(link.title, 3))
                     self.assertTrue(is_string_and_longer_than(link.snippet, 3))
@@ -128,7 +128,6 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
                 self.assertTrue(is_string_and_longer_than(link.link, 10))
                 self.assertTrue(link.domain in link.link)
                 self.assertTrue(isinstance(link.rank, int))
-
 
     def test_google_with_phantomjs_and_json_output(self):
         """
@@ -174,14 +173,13 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
             self.assertEqual(serp.no_results, False)
             self.assertEqual(serp.num_results, len(serp.links))
 
-            for j, link in enumerate(serp.links):
+            for _, link in enumerate(serp.links):
                 if link.link_type == 'results':
                     self.assertTrue(is_string_and_longer_than(link.title, 3))
                     self.assertTrue(is_string_and_longer_than(link.snippet, 3))
 
                 self.assertTrue(is_string_and_longer_than(link.link, 10))
                 self.assertTrue(isinstance(link.rank, int))
-
 
         # test that the json output is correct
         self.assertTrue(os.path.isfile(results_file))
@@ -195,19 +193,18 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
                 self.assertEqual(page['no_results'], 'False')
                 self.assertEqual(page['num_results'], str(len(page['results'])))
                 self.assertTrue(is_string_and_longer_than(page['num_results_for_query'], 5))
-                self.assertEqual(page['page_number'], str(i+1))
+                self.assertEqual(page['page_number'], str(i + 1))
                 self.assertEqual(page['query'], 'apple tree')
                 # todo: Test requested_at
                 self.assertEqual(page['requested_by'], 'localhost')
 
-                for j, result in enumerate(page['results']):
+                for _, result in enumerate(page['results']):
                     if result['link_type'] == 'results':
                         self.assertTrue(is_string_and_longer_than(result['title'], 3))
                         self.assertTrue(is_string_and_longer_than(result['snippet'], 3))
 
                     self.assertTrue(is_string_and_longer_than(result['link'], 10))
                     self.assertTrue(isinstance(int(result['rank']), int))
-
 
     def test_http_mode_google_csv_output(self):
 
@@ -248,8 +245,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
 
             self.assertEqual(serp.num_results, len(serp.links))
 
-            predicate_true_at_least_n_times(lambda v: is_string_and_longer_than(v, 3),
-                                                    serp.links, 7, 'snippet')
+            predicate_true_at_least_n_times(lambda v: is_string_and_longer_than(v, 3), serp.links, 7, 'snippet')
             for link in serp.links:
                 if link.link_type == 'results':
                     self.assertTrue(is_string_and_longer_than(link.title, 3))
@@ -274,7 +270,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
                 self.assertEqual(row['scrape_method'], 'http')
                 self.assertEqual(row['requested_by'], 'localhost')
                 self.assertEqual(row['search_engine_name'], 'google')
-                self.assertIn(int(row['page_number']), [1,2])
+                self.assertIn(int(row['page_number']), [1, 2])
                 self.assertEqual(row['status'], 'successful')
                 self.assertTrue(row['no_results'] == 'False')
                 self.assertTrue(row['effective_query'] == '')
@@ -290,8 +286,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
                 self.assertTrue(row['rank'].isdigit())
 
             # ensure that at least 90% of all entries have a string as snippet
-            predicate_true_at_least_n_times(lambda v: is_string_and_longer_than(v, 3), rows, int(0.8*len(rows)), 'snippet')
-
+            predicate_true_at_least_n_times(lambda v: is_string_and_longer_than(v, 3), rows, int(0.8 * len(rows)), 'snippet')
 
     def test_asynchronous_mode_bing_and_yandex(self):
         """
@@ -324,7 +319,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
         self.assertEqual(len(search.serps), 6)
 
         # test that we have twice [1,2,3] as page numbers
-        self.assertSetEqual(set([serp.page_number for serp in search.serps]), {1,2,3})
+        self.assertSetEqual(set([serp.page_number for serp in search.serps]), {1, 2, 3})
 
         self.assertAlmostEqual(sum([len(serp.links) for serp in search.serps]), 60, delta=10)
         self.assertAlmostEqual(sum([len(serp.links) for serp in search.serps if serp.search_engine_name == 'yandex']), 30, delta=5)
@@ -341,8 +336,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
             self.assertFalse(is_string_and_longer_than(serp.effective_query, 1), msg=serp.effective_query)
             self.assertEqual(serp.num_results, len(serp.links))
 
-            predicate_true_at_least_n_times(lambda v: is_string_and_longer_than(v, 3),
-                                                    serp.links, 7, 'snippet')
+            predicate_true_at_least_n_times(lambda v: is_string_and_longer_than(v, 3), serp.links, 7, 'snippet')
             for link in serp.links:
                 if link.link_type == 'results':
                     self.assertTrue(is_string_and_longer_than(link.title, 3))
@@ -357,7 +351,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
             obj = json.load(file)
 
             # check the same stuff again for the json file
-            for i, page in enumerate(obj):
+            for _, page in enumerate(obj):
                 self.assertEqual(page['effective_query'], '')
                 self.assertEqual(page['num_results'], str(len(page['results'])))
                 if page['search_engine_name'].lower() != 'yandex':
@@ -365,7 +359,7 @@ class GoogleScraperFunctionalTestCase(unittest.TestCase):
                 self.assertEqual(page['query'], 'where is my mind')
                 self.assertEqual(page['requested_by'], 'localhost')
 
-                for j, result in enumerate(page['results']):
+                for _, result in enumerate(page['results']):
                     if result['link_type'] == 'results':
                         self.assertTrue(is_string_and_longer_than(result['title'], 3))
                         self.assertTrue(is_string_and_longer_than(result['snippet'], 3))

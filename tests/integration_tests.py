@@ -21,7 +21,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    ### Test (very) static parsing for all search engines. The html files are saved in 'data/uncompressed_serp_pages/'
+    # Test (very) static parsing for all search engines. The html files are saved in 'data/uncompressed_serp_pages/'
     # The sample files may become old and the SERP format may change over time. But this is the only
     # way to assert that a certain url or piece must be in the results.
     # If the SERP format changes, update accordingly (after all, this shouldn't happen that often).
@@ -40,7 +40,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
             len([v['snippet'] for v in parser.search_results['results'] if v['snippet'] is not None]), 10, delta=delta)
 
     def assert_atleast90percent_of_items_are_not_None(self, parser, exclude_keys={'snippet'}):
-        for result_type, res in parser.search_results.items():
+        for _, res in parser.search_results.items():
 
             c = Counter()
             for item in res:
@@ -120,9 +120,8 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
 
     def test_parse_duckduckgo(self):
 
-        parser = self.get_parser_for_file('duckduckgo', 'data/uncompressed_serp_pages/mountain_duckduckgo_de_ip.html')
-
-        # duckduckgo is a biatch
+        self.get_parser_for_file('duckduckgo', 'data/uncompressed_serp_pages/mountain_duckduckgo_de_ip.html')
+        # TODO add some tests
 
     def test_parse_ask(self):
 
@@ -135,8 +134,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
         self.assert_around_10_results_with_snippets(parser)
         self.assert_atleast90percent_of_items_are_not_None(parser)
 
-    ### test csv output
-
+    # test csv output
     def test_csv_output_static(self):
         """Test csv output.
 
@@ -167,7 +165,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
             'verbosity': 0,
             'output_filename': csv_outfile,
         }
-        search = scrape_with_config(config)
+        scrape_with_config(config)
 
         assert os.path.exists(csv_outfile), '{} does not exist'.format(csv_outfile)
 
@@ -190,8 +188,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
 
         self.assertAlmostEqual(number_search_engines * 2 * 10, rownum, delta=30)
 
-    ### test json output
-
+    # test json output
     def test_json_output_static(self):
         """Test json output.
 
@@ -212,7 +209,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
             'verbosity': 0,
             'output_filename': json_outfile
         }
-        search = scrape_with_config(config)
+        scrape_with_config(config)
 
         assert os.path.exists(json_outfile), '{} does not exist'.format(json_outfile)
 
@@ -240,8 +237,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
 
         self.assertAlmostEqual(number_search_engines * 2 * 10, num_results, delta=30)
 
-    ### test correct handling of SERP page that has no results for search query.
-
+    # test correct handling of SERP page that has no results for search query.
     def test_no_results_for_query_google(self):
         parser = self.get_parser_for_file('google', 'data/uncompressed_no_results_serp_pages/google.html')
 
@@ -262,8 +258,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
 
         assert parser.effective_query == 'food', 'Wrong effective query. {}'.format(parser.effective_query)
 
-    ### test correct parsing of the current page number.
-
+    # test correct parsing of the current page number.
     def test_page_number_selector_yandex(self):
         parser = self.get_parser_for_file('yandex', 'data/page_number_selector/yandex_5.html')
         assert parser.page_number == 5, 'Wrong page number. Got {}'.format(parser.page_number)
@@ -290,8 +285,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
         parser = self.get_parser_for_file('ask', 'data/page_number_selector/ask_7.html')
         assert parser.page_number == 7, 'Wrong page number. Got {}'.format(parser.page_number)
 
-    ### test all SERP object indicate no results for all search engines.
-
+    # test all SERP object indicate no results for all search engines.
     def test_no_results_serp_object(self):
 
         config = {
@@ -336,7 +330,7 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
             assert parser.num_results == 0 or parser.effective_query, 'No results must be true for search engine {}! But got {} serp entries and effective query: {}.'.format(
                 search_engine, parser.num_results, parser.effective_query)
 
-            ### test correct parsing of the number of results for the query..
+            # test correct parsing of the number of results for the query..
 
     def test_csv_file_header_always_the_same(self):
         """
@@ -355,11 +349,12 @@ class GoogleScraperIntegrationTestCase(unittest.TestCase):
             'verbosity': 0,
             'output_filename': csv_outfile_1,
         }
-        search = scrape_with_config(config)
 
-        search = scrape_with_config(config)
+        # TODO check if required to do twice
+        scrape_with_config(config)
+        scrape_with_config(config)
         config.update({'output_filename': csv_outfile_2})
-        search = scrape_with_config(config)
+        scrape_with_config(config)
 
         assert os.path.isfile(csv_outfile_1) and os.path.isfile(csv_outfile_2)
 
