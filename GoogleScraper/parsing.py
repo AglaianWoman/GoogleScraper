@@ -349,7 +349,7 @@ class GoogleParser(Parser):
 
     num_results_search_selectors = ['#resultStats']
 
-    page_number_selectors = ['#navcnt td.cur::text']
+    page_number_selectors = ['div#foot div#navcnt td.cur::text']
 
     normal_search_selectors = {
         'results': {
