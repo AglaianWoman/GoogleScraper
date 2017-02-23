@@ -45,6 +45,8 @@ class ScrapSerps():
             # 'sel_browser': 'chrome', uncomment if scrape_method is selenium
             # 'executable_path': 'path\to\chromedriver' or 'path\to\phantomjs',
             'do_caching': 'True',
+            'cachedir': '/tmp/.scrapecache/',
+            'database_name': '/tmp/google_scraper',
             'clean_cache_after': 24,
             'output_filename': None,
             'print_results': 'all',
