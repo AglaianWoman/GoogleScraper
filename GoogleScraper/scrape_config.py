@@ -214,8 +214,8 @@ clean_cache_after = 48
 # The scraper in selenium mode makes random modes every N seconds as specified in the given intervals.
 # Format=  [Every Nth second when to sleep]# ([Start range], [End range])
 sleeping_ranges = {
-    1:  (1, 2),
-    5:  (2, 4),
+    1: (1, 2),
+    5: (2, 4),
     30: (10, 20),
     127: (30, 50),
 }
@@ -225,8 +225,8 @@ sleeping_ranges = {
 # option {search_engine_name}_sleeping_ranges, then
 # only this search engine will sleep the supplied ranges.
 google_sleeping_ranges = {
-    1:  (2, 3),
-    5:  (3, 5),
+    1: (2, 3),
+    5: (3, 5),
     30: (10, 20),
     127: (30, 50),
 }
@@ -246,6 +246,9 @@ All settings that only apply for requesting with real browsers.
 
 # which browser to use in selenium mode. Valid values=  ('Chrome', 'Firefox', 'Phantomjs')
 sel_browser = 'Chrome'
+
+# path to webdriver
+executable_path = ''
 
 # Manual captcha solving
 # If this parameter is set to a Integer, the browser waits for the user

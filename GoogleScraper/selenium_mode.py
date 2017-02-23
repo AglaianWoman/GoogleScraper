@@ -217,9 +217,9 @@ class SelScrape(SearchEngineScrape, threading.Thread):
                 chrome_ops = webdriver.ChromeOptions()
                 chrome_ops.add_argument(
                     '--proxy-server={}://{}:{}'.format(self.proxy.proto, self.proxy.host, self.proxy.port))
-                self.webdriver = webdriver.Chrome(chrome_options=chrome_ops)
+                self.webdriver = webdriver.Chrome(executable_path=self.config['executebale_path'], chrome_options=chrome_ops)
             else:
-                self.webdriver = webdriver.Chrome()  # service_log_path='/tmp/chromedriver_log.log')
+                self.webdriver = webdriver.Chrome(executable_path=self.config['executable_path'])  # service_log_path='/tmp/chromedriver_log.log')
             return True
         except WebDriverException:
             # we don't have a chrome executable or a chrome webdriver installed
@@ -269,8 +269,7 @@ class SelScrape(SearchEngineScrape, threading.Thread):
 
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = random_user_agent(only_desktop=True)
-
-            self.webdriver = webdriver.PhantomJS(service_args=service_args, desired_capabilities=dcap)
+            self.webdriver = webdriver.PhantomJS(executable_path=self.config['executable_path'], service_args=service_args, desired_capabilities=dcap)
             return True
         except WebDriverException as e:
             logger.error(e)
