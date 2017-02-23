@@ -43,9 +43,9 @@ class ScrapSerps():
             'num_pages_for_keyword': 2,
             'scrape_method': 'http',
             'do_caching': 'True',
+            'clean_cache_after': 24,
             'output_filename': None,
-            'output_format': 'json',
-            'print_results': 'all'
+            'print_results': 'all',
         }
         try:
             return scrape_with_config(config)
