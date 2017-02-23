@@ -1,8 +1,8 @@
-lxml
-selenium
-cssselect
-requests
-PyMySql
-sqlalchemy
-aiohttp
-# redis
+lxml==3.6.0
+selenium==3.0.2
+cssselect==0.9.1
+requests==2.11.1
+PyMySql==0.7.2
+sqlalchemy==1.0.12
+aiohttp==0.21.5
+chardet==2.3.0
